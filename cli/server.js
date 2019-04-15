@@ -85,11 +85,9 @@ app.post('/upload', upload.single('screenshot'), (req, res, next) => {
     res.status(200).send();
 });
 
-let server = http.listen(8083, function() {
-    console.log('listening on *:8083');
-});
+let server;
 
-function wireUpServer(/*httpServer*/ server) {
+function wireUpServer(server) {
     var connections = {};
     server.on('connection', function(conn) {
         var key = conn.remoteAddress + ':' + conn.remotePort;
@@ -106,9 +104,13 @@ function wireUpServer(/*httpServer*/ server) {
     };
 };
 
-wireUpServer(server);
 
 function connect(callback) {
+    server = http.listen(8083, function() {
+        console.log('listening on *:8083');
+    });
+    wireUpServer(server);
+
     events.on('connect', (socket) => {
         const runner = new Runner(socket);
         callback(runner);
