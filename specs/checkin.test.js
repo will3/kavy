@@ -48,118 +48,126 @@ describe('check in', function() {
 
         await runner.pause(1000);
 
-        const applyVouchersImage = await runner.screenshot('add voucher/apply vouchers');
-
-        expect(applyVouchersImage).toMatchImageSnapshot({
-            failureThreshold: '2.0',
-            failureThresholdType: 'percent'
-        });
+        const image = await runner.screenshot('add voucher/apply vouchers');
+        expect(image).toMatchImageSnapshot();
     });
 
-    // test('add and remove voucher', async () => {
-    //     runner.route('GET', '/v3/check-in/qr', {
-    //         loyaltyAccountCode: '3780'
-    //     });
+    test('add and remove voucher', async () => {
+        runner.route('GET', '/v3/check-in/qr', {
+            loyaltyAccountCode: '3780'
+        });
 
-    //     routeVouchers();
+        routeVouchers();
 
-    //     runner.route('POST', '/v3/check-in', {
-    //         code: 'd262a8b0-8ae1-47f2-97ba-29bddd8c2202',
-    //         expiry: 1799
-    //     });
+        runner.route('POST', '/v3/check-in', {
+            code: 'd262a8b0-8ae1-47f2-97ba-29bddd8c2202',
+            expiry: 1799
+        });
 
-    //     await runner.press('tabButton.checkIn');
-    //     await runner.press('checkIn.introModal.okButton');
-    //     await runner.press('callToActionVoucherButton');
-    //     await runner.press('voucherList.voucher.0');
-    //     await runner.press('voucherList.applyButton');
-    //     await runner.press('checkIn.removeVoucher');
-    // });
+        await runner.press('tabButton.checkIn');
+        await runner.press('checkIn.introModal.okButton');
+        await runner.press('callToActionVoucherButton');
+        await runner.press('voucherList.voucher.0');
+        await runner.press('voucherList.applyButton');
+        await runner.press('checkIn.removeVoucher');
 
-    // test('add fly buys', async () => {
-    //     await runner.route('GET', '/v3/check-in/qr', {
-    //         loyaltyAccountCode: '3780'
-    //     });
+        const image = await runner.screenshot('removed voucher');
+        expect(image).toMatchImageSnapshot();
+    });
 
-    //     await runner.route({
-    //         method: 'GET',
-    //         url: '/api/3/flybuys',
-    //         body: [],
-    //         headers: {
-    //             signature
-    //         }
-    //     });
+    test('add fly buys', async () => {
+        await runner.route('GET', '/v3/check-in/qr', {
+            loyaltyAccountCode: '3780'
+        });
 
-    //     await runner.route({
-    //         method: 'POST',
-    //         url: '/api/3/flybuys/add_card',
-    //         status: 200,
-    //         headers: {
-    //             signature
-    //         },
-    //         body: [{
-    //             'card_number': '2645521028539',
-    //             'is_default': true
-    //         }]
-    //     });
+        await runner.route({
+            method: 'GET',
+            url: '/api/3/flybuys',
+            body: [],
+            headers: {
+                signature
+            }
+        });
 
-    //     await runner.press('tabButton.checkIn');
-    //     await runner.press('checkIn.introModal.okButton');
-    //     await runner.press('cardsAccordion.select');
-    //     await runner.press('cardsAccordion.addFlyBuysButton');
-    //     await runner.enter('flyBuys.cardInput', "6014351234567863");
+        await runner.route({
+            method: 'POST',
+            url: '/api/3/flybuys/add_card',
+            status: 200,
+            headers: {
+                signature
+            },
+            body: [{
+                'card_number': '2645521028539',
+                'is_default': true
+            }]
+        });
 
-    //     await runner.route({
-    //         method: 'GET',
-    //         url: '/api/3/flybuys',
-    //         body: [{
-    //             'card_number': '2645521028539',
-    //             'is_default': true
-    //         }],
-    //         headers: {
-    //             signature
-    //         }
-    //     });
+        await runner.press('tabButton.checkIn');
+        await runner.press('checkIn.introModal.okButton');
+        await runner.press('cardsAccordion.select');
+        await runner.press('cardsAccordion.addFlyBuysButton');
+        await runner.enter('flyBuys.cardInput', "6014351234567863");
 
-    //     await runner.press('flyBuys.addButton');
-    // });
+        await runner.route({
+            method: 'GET',
+            url: '/api/3/flybuys',
+            body: [{
+                'card_number': '2645521028539',
+                'is_default': true
+            }],
+            headers: {
+                signature
+            }
+        });
 
-    // test('opens info', async () => {
-    //     await runner.route('GET', '/v3/check-in/qr', {
-    //         loyaltyAccountCode: '3780'
-    //     });
+        await runner.press('flyBuys.addButton');
 
-    //     await runner.press("tabButton.checkIn");
-    //     await runner.press("checkIn.introModal.okButton");
-    //     await runner.press("checkIn.info");
-    // });
+        const image = await runner.screenshot('add fly buys');
+        expect(image).toMatchImageSnapshot();
+    });
 
-    // test('view stamp card', async () => {
-    //     await runner.route('GET', '/v3/check-in/qr', {
-    //         loyaltyAccountCode: '3780'
-    //     });
+    test('opens info', async () => {
+        await runner.route('GET', '/v3/check-in/qr', {
+            loyaltyAccountCode: '3780'
+        });
 
-    //     await runner.route('GET', '/v3/collector-cards', [{
-    //             type: 'Coffee',
-    //             qualificationQuantity: 6,
-    //             quantityAccumulated: 0
-    //         },
-    //         {
-    //             type: 'CarWash',
-    //             qualificationQuantity: 4,
-    //             quantityAccumulated: 0
-    //         },
-    //         {
-    //             type: 'Lpg',
-    //             qualificationQuantity: 3,
-    //             quantityAccumulated: 0
-    //         }
-    //     ]);
+        await runner.press("tabButton.checkIn");
+        await runner.press("checkIn.introModal.okButton");
+        await runner.press("checkIn.info");
 
-    //     await runner.press("tabButton.checkIn");
-    //     await runner.press("checkIn.introModal.okButton");
-    //     await runner.press("checkIn.stampCards.0");
-    // });
+        const image = await runner.screenshot('info');
+        expect(image).toMatchImageSnapshot();
+    });
+
+    test('view stamp card', async () => {
+        await runner.route('GET', '/v3/check-in/qr', {
+            loyaltyAccountCode: '3780'
+        });
+
+        await runner.route('GET', '/v3/collector-cards', [{
+                type: 'Coffee',
+                qualificationQuantity: 6,
+                quantityAccumulated: 0
+            },
+            {
+                type: 'CarWash',
+                qualificationQuantity: 4,
+                quantityAccumulated: 0
+            },
+            {
+                type: 'Lpg',
+                qualificationQuantity: 3,
+                quantityAccumulated: 0
+            }
+        ]);
+
+        await runner.press("tabButton.checkIn");
+        await runner.press("checkIn.introModal.okButton");
+        await runner.press("checkIn.stampCards.0");
+
+        const image = await runner.screenshot('stamp card drawer');
+        expect(image).toMatchImageSnapshot();
+    });
 
     async function routeVouchers() {
         await runner.route('GET', '/v3/vouchers/all', [{

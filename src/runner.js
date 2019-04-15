@@ -31,6 +31,13 @@ class Runner {
     }
 
     async screenshot(name) {
+        // Wait 
+        const screenshotWait = 500;
+        await new Promise((resolve, _) => {
+            setTimeout(() => {
+                resolve();
+            }, screenshotWait);
+        });
         name = name || 'unnamed';
         const path = libPath.join(this.file, name);
         const result = await this.rpc('screenshot', [path]);
