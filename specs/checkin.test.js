@@ -1,55 +1,62 @@
 const connect = require('../src/server').connect;
 const libPath = require('path');
+const { toMatchImageSnapshot } = require('jest-image-snapshot');
+expect.extend({ toMatchImageSnapshot });
 
-describe('check in', function () {
-    let runner, server;
+jest.setTimeout(60000);
+
+describe('check in', function() {
+    let runner, closeServer;
     const signature = 'GXtWmWIs+77yYWROSRpzvgdREBERTRP5vMnohm/Ei8yB7RQN1F9ThVd8svZO6+b9G0sD3FfjsNmDVanA9v1ZqQZIoLqjwtl6Xpyspmg+VjvpP0dMZBgmAWvwQg8Pa1k2TLL+whJzKdhmZ50EOkMGomLlCjOWgs60gXrEd7IYrvSyfCw7bTaEeTyzu9OCLnfcF65LTHFHT8R0iQZz6A6IG717TzuxEwPJh27A4epRURdWtqgvsGWY6M87oluSnRH5uuWCwO72UNpiWbb3mTwsC016/TQUfDwXkdWlIPLFSwU2U/PJ0iRrgX7cizJ46PFwl2bMV6GwMexlGhmJAkvtuA==';
 
-    before(async function() {
+    beforeAll(async function() {
         runner = await new Promise((resolve, reject) => {
-            server = connect((r) => {
+            closeServer = connect((r) => {
                 resolve(r);
             });
         });
 
-        const file = libPath.relative(__dirname, this.test.file);
+        const file = libPath.relative(__dirname, __filename);
         runner.file = file;
     });
 
-    after(() => {
-        server.close();
+    afterAll(async () => {
+        await closeServer();
     });
 
     beforeEach(async () => {
         await runner.reRender();
     });
 
-    it('add voucher', async function () {
-        // await runner.route('GET', '/v3/check-in/qr', {
-        //     loyaltyAccountCode: '3780'
-        // });
+    test('add voucher', async function() {
+        await runner.route('GET', '/v3/check-in/qr', {
+            loyaltyAccountCode: '3780'
+        });
 
-        // await routeVouchers();
+        await routeVouchers();
 
-        // await runner.route('POST', '/v3/check-in', {
-        //     code: 'd262a8b0-8ae1-47f2-97ba-29bddd8c2202',
-        //     expiry: 1799
-        // });
+        await runner.route('POST', '/v3/check-in', {
+            code: 'd262a8b0-8ae1-47f2-97ba-29bddd8c2202',
+            expiry: 1799
+        });
 
-        // await runner.press('tabButton.checkIn');
+        await runner.press('tabButton.checkIn');
+        await runner.press('checkIn.introModal.okButton');
+        await runner.press('callToActionVoucherButton');
+        await runner.press('voucherList.voucher.0');
+        await runner.press('voucherList.applyButton');
 
-        await runner.screenshot('actions/checkIn');
-        await runner.screenshot('actions/checkIn');
+        await runner.pause(1000);
 
-        // await runner.press('checkIn.introModal.okButton');
-        // await runner.press('callToActionVoucherButton');
-        // await runner.press('voucherList.voucher.0');
-        // await runner.press('voucherList.applyButton');
+        const applyVouchersImage = await runner.screenshot('add voucher/apply vouchers');
 
-        // await runner.screenshot();
+        expect(applyVouchersImage).toMatchImageSnapshot({
+            failureThreshold: '2.0',
+            failureThresholdType: 'percent'
+        });
     });
 
-    // it('add and remove voucher', async () => {
+    // test('add and remove voucher', async () => {
     //     runner.route('GET', '/v3/check-in/qr', {
     //         loyaltyAccountCode: '3780'
     //     });
@@ -69,7 +76,7 @@ describe('check in', function () {
     //     await runner.press('checkIn.removeVoucher');
     // });
 
-    // it('add fly buys', async () => {
+    // test('add fly buys', async () => {
     //     await runner.route('GET', '/v3/check-in/qr', {
     //         loyaltyAccountCode: '3780'
     //     });
@@ -117,7 +124,7 @@ describe('check in', function () {
     //     await runner.press('flyBuys.addButton');
     // });
 
-    // it('opens info', async () => {
+    // test('opens info', async () => {
     //     await runner.route('GET', '/v3/check-in/qr', {
     //         loyaltyAccountCode: '3780'
     //     });
@@ -127,7 +134,7 @@ describe('check in', function () {
     //     await runner.press("checkIn.info");
     // });
 
-    // it('view stamp card', async () => {
+    // test('view stamp card', async () => {
     //     await runner.route('GET', '/v3/check-in/qr', {
     //         loyaltyAccountCode: '3780'
     //     });

@@ -1,6 +1,9 @@
 const buffer = require('./buffer');
 const guid = require('uuid/v4');
 const libPath = require('path');
+const config = require('./config');
+const screenshotsDir = config.screenshotsDir;
+const fs = require('fs-extra');
 
 class Runner {
     constructor(socket) {
@@ -28,8 +31,16 @@ class Runner {
     }
 
     async screenshot(name) {
+        name = name || 'unnamed';
         const path = libPath.join(this.file, name);
-        await this.rpc('screenshot', [path]);
+        const result = await this.rpc('screenshot', [path]);
+        const imagePath = libPath.join(screenshotsDir, result + '.png');
+        const image = fs.readFileSync(imagePath);
+        return image;
+    }
+
+    async pause(ms) {
+        await this.rpc('pause');
     }
 
     async rpc(func, args) {
@@ -37,7 +48,7 @@ class Runner {
         const rpcId = guid();
 
         const start = Date.now();
-        const waitTime = 20000;
+        const waitTime = 60000;
 
         console.log('rpc', func, args);
 
