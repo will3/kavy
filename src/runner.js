@@ -1,5 +1,6 @@
 const buffer = require('./buffer');
 const guid = require('uuid/v4');
+const libPath = require('path');
 
 class Runner {
     constructor(socket) {
@@ -24,6 +25,11 @@ class Runner {
 
     async route(initOrMethod, url, response) {
         await this.rpc('route', [initOrMethod, url, response]);
+    }
+
+    async screenshot(name) {
+        const path = libPath.join(this.file, name);
+        await this.rpc('screenshot', [path]);
     }
 
     async rpc(func, args) {
