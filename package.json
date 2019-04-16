@@ -18,11 +18,13 @@
   "keywords": [],
   "description": "",
   "dependencies": {
+    "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "deasync-promise": "^1.0.1",
     "express": "^4.16.4",
     "fs-extra": "^7.0.1",
     "http-shutdown": "^1.2.0",
+    "javascript-stringify": "^2.0.0",
     "jest-environment-node": "^24.7.1",
     "jest-image-snapshot": "^2.8.1",
     "mocha": "^6.1.3",

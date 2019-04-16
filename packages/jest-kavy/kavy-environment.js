@@ -1,6 +1,5 @@
 const NodeEnvironment = require('jest-environment-node');
 const { connect } = require('../../cli/server');
-const libPath = require('path');
 
 class KavyEnvironment extends NodeEnvironment {
   constructor(config, context) {
@@ -13,17 +12,15 @@ class KavyEnvironment extends NodeEnvironment {
 
     console.log('------- setup -------');
 
-    this.global.runner = await new Promise((resolve, reject) => {
+    this.global.kv = await new Promise((resolve, reject) => {
         this.closeServer = connect((r) => {
             resolve(r);
         });
     });
-    const file = libPath.relative(__dirname, __filename);
-    this.global.runner.file = file;
   }
 
   async teardown() {
-    this.global.runner = null;
+    this.global.kv = null;
     await this.closeServer();
     
     await super.teardown();

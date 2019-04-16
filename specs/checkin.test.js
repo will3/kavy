@@ -1,19 +1,12 @@
-const connect = require('../cli/server').connect;
-const libPath = require('path');
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
-expect.extend({ toMatchImageSnapshot });
-
-jest.setTimeout(60000);
-
 describe('check in', function() {
     const signature = 'GXtWmWIs+77yYWROSRpzvgdREBERTRP5vMnohm/Ei8yB7RQN1F9ThVd8svZO6+b9G0sD3FfjsNmDVanA9v1ZqQZIoLqjwtl6Xpyspmg+VjvpP0dMZBgmAWvwQg8Pa1k2TLL+whJzKdhmZ50EOkMGomLlCjOWgs60gXrEd7IYrvSyfCw7bTaEeTyzu9OCLnfcF65LTHFHT8R0iQZz6A6IG717TzuxEwPJh27A4epRURdWtqgvsGWY6M87oluSnRH5uuWCwO72UNpiWbb3mTwsC016/TQUfDwXkdWlIPLFSwU2U/PJ0iRrgX7cizJ46PFwl2bMV6GwMexlGhmJAkvtuA==';
 
     beforeEach(async () => {
-        await runner.route('GET', '/v3/check-in/qr', {
+        await kv.route('GET', '/v3/check-in/qr', {
             loyaltyAccountCode: '3780'
         });
 
-        await runner.route('GET', '/v3/vouchers/all', [{
+        await kv.route('GET', '/v3/vouchers/all', [{
                 loyaltyOfferCode: '1005407',
                 validPeriod: {
                     dateFrom: '2019-04-03T12:00:00+00:00',
@@ -39,7 +32,7 @@ describe('check in', function() {
             }
         ]);
 
-        await runner.route('GET', '/v3/collector-cards', [{
+        await kv.route('GET', '/v3/collector-cards', [{
                 type: 'Coffee',
                 qualificationQuantity: 6,
                 quantityAccumulated: 0
@@ -58,42 +51,42 @@ describe('check in', function() {
     });
 
     test('add voucher', async function() {
-        await runner.route('POST', '/v3/check-in', {
+        await kv.route('POST', '/v3/check-in', {
             code: 'd262a8b0-8ae1-47f2-97ba-29bddd8c2202',
             expiry: 1799
         });
 
-        await runner.press('tabButton.checkIn');
-        await runner.press('checkIn.introModal.okButton');
-        await runner.press('callToActionVoucherButton');
-        await runner.press('voucherList.voucher.0');
-        await runner.press('voucherList.applyButton');
+        await kv.press('tabButton.checkIn');
+        await kv.press('checkIn.introModal.okButton');
+        await kv.press('callToActionVoucherButton');
+        await kv.press('voucherList.voucher.0');
+        await kv.press('voucherList.applyButton');
 
-        await runner.pause(1000);
+        await kv.pause(1000);
 
-        const image = await runner.screenshot('add voucher/apply vouchers');
+        const image = await kv.screenshot('add voucher/apply vouchers');
         expect(image).toMatchImageSnapshot();
     });
 
     test('add and remove voucher', async () => {
-        await runner.route('POST', '/v3/check-in', {
+        await kv.route('POST', '/v3/check-in', {
             code: 'd262a8b0-8ae1-47f2-97ba-29bddd8c2202',
             expiry: 1799
         });
 
-        await runner.press('tabButton.checkIn');
-        await runner.press('checkIn.introModal.okButton');
-        await runner.press('callToActionVoucherButton');
-        await runner.press('voucherList.voucher.0');
-        await runner.press('voucherList.applyButton');
-        await runner.press('checkIn.removeVoucher');
+        await kv.press('tabButton.checkIn');
+        await kv.press('checkIn.introModal.okButton');
+        await kv.press('callToActionVoucherButton');
+        await kv.press('voucherList.voucher.0');
+        await kv.press('voucherList.applyButton');
+        await kv.press('checkIn.removeVoucher');
 
-        const image = await runner.screenshot('removed voucher');
+        const image = await kv.screenshot('removed voucher');
         expect(image).toMatchImageSnapshot();
     });
 
     test('add fly buys', async () => {
-        await runner.route({
+        await kv.route({
             method: 'GET',
             url: '/api/3/flybuys',
             body: [],
@@ -102,7 +95,7 @@ describe('check in', function() {
             }
         });
 
-        await runner.route({
+        await kv.route({
             method: 'POST',
             url: '/api/3/flybuys/add_card',
             status: 200,
@@ -115,13 +108,13 @@ describe('check in', function() {
             }]
         });
 
-        await runner.press('tabButton.checkIn');
-        await runner.press('checkIn.introModal.okButton');
-        await runner.press('cardsAccordion.select');
-        await runner.press('cardsAccordion.addFlyBuysButton');
-        await runner.enter('flyBuys.cardInput', "6014351234567863");
+        await kv.press('tabButton.checkIn');
+        await kv.press('checkIn.introModal.okButton');
+        await kv.press('cardsAccordion.select');
+        await kv.press('cardsAccordion.addFlyBuysButton');
+        await kv.enter('flyBuys.cardInput', "6014351234567863");
 
-        await runner.route({
+        await kv.route({
             method: 'GET',
             url: '/api/3/flybuys',
             body: [{
@@ -133,27 +126,27 @@ describe('check in', function() {
             }
         });
 
-        await runner.press('flyBuys.addButton');
+        await kv.press('flyBuys.addButton');
 
-        const image = await runner.screenshot('add fly buys');
+        const image = await kv.screenshot('add fly buys');
         expect(image).toMatchImageSnapshot();
     });
 
     test('opens info', async () => {
-        await runner.press("tabButton.checkIn");
-        await runner.press("checkIn.introModal.okButton");
-        await runner.press("checkIn.info");
+        await kv.press("tabButton.checkIn");
+        await kv.press("checkIn.introModal.okButton");
+        await kv.press("checkIn.info");
 
-        const image = await runner.screenshot('info');
+        const image = await kv.screenshot('info');
         expect(image).toMatchImageSnapshot();
     });
 
     test('view stamp card', async () => {
-        await runner.press("tabButton.checkIn");
-        await runner.press("checkIn.introModal.okButton");
-        await runner.press("checkIn.stampCards.0");
+        await kv.press("tabButton.checkIn");
+        await kv.press("checkIn.introModal.okButton");
+        await kv.press("checkIn.stampCards.0");
 
-        const image = await runner.screenshot('stamp card drawer');
+        const image = await kv.screenshot('stamp card drawer');
         expect(image).toMatchImageSnapshot();
     });
 });

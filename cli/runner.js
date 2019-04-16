@@ -18,6 +18,14 @@ class Runner {
         await this.rpc('enter', [id, text]);
     }
 
+    async focus(id) {
+        await this.rpc('focus', [id]);
+    }
+
+    async type(id, text) {
+        await this.rpc('type', [id, text]);   
+    }
+
     async clearAsync() {
         await this.rpc('clearAsync');
     }
