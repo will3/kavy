@@ -1,7 +1,7 @@
 describe('check in', function() {
     const signature = 'GXtWmWIs+77yYWROSRpzvgdREBERTRP5vMnohm/Ei8yB7RQN1F9ThVd8svZO6+b9G0sD3FfjsNmDVanA9v1ZqQZIoLqjwtl6Xpyspmg+VjvpP0dMZBgmAWvwQg8Pa1k2TLL+whJzKdhmZ50EOkMGomLlCjOWgs60gXrEd7IYrvSyfCw7bTaEeTyzu9OCLnfcF65LTHFHT8R0iQZz6A6IG717TzuxEwPJh27A4epRURdWtqgvsGWY6M87oluSnRH5uuWCwO72UNpiWbb3mTwsC016/TQUfDwXkdWlIPLFSwU2U/PJ0iRrgX7cizJ46PFwl2bMV6GwMexlGhmJAkvtuA==';
 
-    beforeEach(async () => {
+    beforeEach(async function() {
         await kv.route('GET', '/v3/check-in/qr', {
             loyaltyAccountCode: '3780'
         });
@@ -64,7 +64,7 @@ describe('check in', function() {
 
         await kv.pause(1000);
 
-        const image = await kv.screenshot('add voucher/apply vouchers');
+        const image = await kv.screenshot('check_in_apply_vouchers');
         expect(image).toMatchImageSnapshot();
     });
 
@@ -81,7 +81,7 @@ describe('check in', function() {
         await kv.press('voucherList.applyButton');
         await kv.press('checkIn.removeVoucher');
 
-        const image = await kv.screenshot('removed voucher');
+        const image = await kv.screenshot('check_in_remove_voucher');
         expect(image).toMatchImageSnapshot();
     });
 
@@ -128,7 +128,7 @@ describe('check in', function() {
 
         await kv.press('flyBuys.addButton');
 
-        const image = await kv.screenshot('add fly buys');
+        const image = await kv.screenshot('check_in_add_fly_buys');
         expect(image).toMatchImageSnapshot();
     });
 
@@ -137,7 +137,7 @@ describe('check in', function() {
         await kv.press("checkIn.introModal.okButton");
         await kv.press("checkIn.info");
 
-        const image = await kv.screenshot('info');
+        const image = await kv.screenshot('check_in_info');
         expect(image).toMatchImageSnapshot();
     });
 
@@ -146,7 +146,7 @@ describe('check in', function() {
         await kv.press("checkIn.introModal.okButton");
         await kv.press("checkIn.stampCards.0");
 
-        const image = await kv.screenshot('stamp card drawer');
+        const image = await kv.screenshot('check_in_stamp_card_drawer');
         expect(image).toMatchImageSnapshot();
     });
 });

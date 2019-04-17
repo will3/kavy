@@ -43,17 +43,11 @@ class Runner {
     }
 
     async screenshot(name) {
-        // Wait 
-        const screenshotWait = 500;
-        await new Promise((resolve, _) => {
-            setTimeout(() => {
-                resolve();
-            }, screenshotWait);
-        });
-        name = name || 'unnamed';
-        const path = libPath.join(this.file, name);
-        const result = await this.rpc('screenshot', [path]);
-        const imagePath = libPath.join(screenshotsDir, result + '.png');
+        if (name == null) {
+            throw new Error('screenshot must be named');
+        }
+        await this.rpc('screenshot', [ name ]);
+        const imagePath = libPath.join(screenshotsDir, name + '.png');
         const image = fs.readFileSync(imagePath);
         return image;
     }
@@ -68,8 +62,6 @@ class Runner {
 
         const start = Date.now();
         const waitTime = 60000;
-
-        console.log('rpc', func, args);
 
         const checkInterval = 1000 / 60;
 
@@ -87,15 +79,12 @@ class Runner {
                 if (resolved != null) {
                     resolve(resolved.value);
                     clearInterval(interval);
-                    console.log('rpc-resolve', func, args);
                 } else if (rejected != null) {
                     reject(new Error(rejected.error));
                     clearInterval(interval);
-                    console.log('rpc-reject', func, args);
                 }
 
                 if (Date.now() - start > waitTime) {
-                    console.log('rpc-timeout', func, args);
                     reject(new Error(`Max wait time reached for rpc ${func} ${args}`));
                     clearInterval(interval);
                 }
