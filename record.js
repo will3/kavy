@@ -20,16 +20,25 @@ io.on('connection', function(socket) {
 
     socket.on('routes', function(route) {
         const urlObject = parse(route.url);
+
+        const params = [
+            quotes(route.method),
+            quotes(urlObject.pathname)
+        ];
+
+        const third = route.body == null ? literal('null') : quotes(stringify(route.body), {
+            color: colorComment
+        });
+
+        params.push(third);
+
+        if (route.status != 200) {
+            params.push(literal(route.status));
+        }
+
         console.log(formatAwait() + 'kv.' + formatFunc('route', {
             color: colorGreen
-        }) + brackets(
-            args(
-                quotes(route.method),
-                quotes(urlObject.pathname),
-                quotes(stringify(route.body), {
-                    color: '#666666'
-                })
-            )));
+        }) + brackets(args(params)));
     });
 });
 
@@ -40,7 +49,7 @@ function flushEvents(events) {
     let found = null;
     for (let i = 0; i < events.length; i++) {
         const event = events[i];
-        if (_.get(event, 'props.testID') != null) {
+        if (event.id != null) {
             found = event;
             break;
         }
@@ -60,19 +69,21 @@ const colorRed = '#FA297D';
 const colorBlue = '#6ED6EA';
 const colorYellow = '#EAE07F';
 const colorGreen = '#ABE230';
+const colorComment = '#7F7B68';
+const colorPurple = '#B58BFF';
 
 function isControlEvent(event) {
     return _.includes(['press', 'changeText', 'focus', 'blur'], event.type);
 };
 
 function logEvent(event) {
-    const id = _.get(event, 'props.testID');
+    const id = event.id;
 
     if (isControlEvent(event)) {
         if (id == null) {
             logComponentNotMapped(event);
             return;
-        }    
+        }
     }
 
     switch (event.type) {
@@ -116,6 +127,12 @@ function args(...array) {
     return result;
 }
 
+function comments(string) {
+    return string.split('\n').map((line) => {
+        return chalk.hex(colorComment)('// ' + line);
+    }).join('\n');
+};
+
 function formatAwait() {
     return chalk.hex(colorRed)('await ');
 }
@@ -127,6 +144,11 @@ function formatFunc(funcName, options) {
     return colorFunc(funcName);
 }
 
+function literal(string) {
+    return chalk.hex(colorPurple)(string);
+}
+
 function logComponentNotMapped(event) {
-    console.log(chalk.inverse('component not mapped\n') + chalk.gray(`event:\n${util.inspect(event, { depth: 1 })}`));
+    console.log(comments(chalk.inverse('component not mapped')));
+    console.log(comments(`event:\n${util.inspect(event, { depth: 1 })}`));
 };
