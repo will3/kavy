@@ -15,6 +15,7 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {});
 
     socket.on('events', function(event) {
+        // throttleEvent(event);
         logEvent(event);
     });
 
@@ -26,6 +27,27 @@ io.on('connection', function(socket) {
 
 const eventBuffer = {};
 const eventBufferWait = 50;
+
+function throttleEvent(event) {
+    const type = event.type;
+    if (eventBuffer[type] == null) {
+        eventBuffer[type] = {
+            events: [],
+            expires: new Date().getTime() + eventBufferWait
+        }
+
+        const interval = setInterval(() => {
+            if (new Date().getTime() > eventBuffer[type].expires) {
+                flushEvents(eventBuffer[type].events);
+                eventBuffer[type] = null;
+                clearInterval(interval);
+            }
+        }, 10);
+    }
+
+    eventBuffer[type].events.push(event);
+    eventBuffer[type].expires = new Date().getTime() + eventBufferWait;
+};
 
 function flushEvents(events) {
     let found = null;
