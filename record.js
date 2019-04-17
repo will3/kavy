@@ -27,7 +27,7 @@ io.on('connection', function(socket) {
                 quotes(route.method),
                 quotes(urlObject.pathname),
                 quotes(stringify(route.body), {
-                    gray: true
+                    color: '#666666'
                 })
             )));
     });
@@ -96,9 +96,9 @@ function logEvent(event) {
 
 function quotes(string, options) {
     options = options || {};
-    const gray = options.gray;
-    const color = gray ? chalk.gray : chalk.hex(colorYellow);
-    return '\'' + color(string) + '\'';
+    const color = options.color;
+    const colorFunc = color == null ? chalk.hex(colorYellow) : chalk.hex(color);
+    return '\'' + colorFunc(string) + '\'';
 }
 
 function brackets(string) {
