@@ -20,7 +20,16 @@ io.on('connection', function(socket) {
 
     socket.on('routes', function(route) {
         const urlObject = parse(route.url);
-        console.log('await kv.' + chalk.green('route') + `('${route.method}', '${urlObject.pathname}', ` + chalk.gray(stringify(route.body)) + ')');
+        console.log(formatAwait() + 'kv.' + formatFunc('route', {
+            color: colorGreen
+        }) + brackets(
+            args(
+                quotes(route.method),
+                quotes(urlObject.pathname),
+                quotes(stringify(route.body), {
+                    gray: true
+                })
+            )));
     });
 });
 
@@ -29,7 +38,7 @@ const eventBufferWait = 50;
 
 function flushEvents(events) {
     let found = null;
-    for(let i = 0; i < events.length; i++) {
+    for (let i = 0; i < events.length; i++) {
         const event = events[i];
         if (_.get(event, 'props.testID') != null) {
             found = event;
@@ -39,8 +48,8 @@ function flushEvents(events) {
 
     if (found == null) {
         console.log('-----------------------');
-        for(let i = 0; i < events.length; i ++) {
-            logEvent(events[i]);    
+        for (let i = 0; i < events.length; i++) {
+            logEvent(events[i]);
         }
     } else {
         logEvent(found);
@@ -50,6 +59,7 @@ function flushEvents(events) {
 const colorRed = '#FA297D';
 const colorBlue = '#6ED6EA';
 const colorYellow = '#EAE07F';
+const colorGreen = '#ABE230';
 
 function logEvent(event) {
     const id = _.get(event, 'props.testID');
@@ -60,16 +70,16 @@ function logEvent(event) {
 
     switch (event.type) {
         case 'press':
-            console.log(chalk.hex(colorRed)('await ') + 'kv.' + chalk.hex(colorBlue)('press') + brackets(quotes(id)));
+            console.log(formatAwait() + 'kv.' + formatFunc('press') + brackets(quotes(id)));
             break;
         case 'changeText':
-            console.log(chalk.hex(colorRed)('await ') + 'kv.' + chalk.hex(colorBlue)('enter') + brackets(args(quotes(id), quotes(event.text))));
+            console.log(formatAwait() + 'kv.' + formatFunc('enter') + brackets(args(quotes(id), quotes(event.text))));
             break;
         case 'focus':
-            console.log(chalk.hex(colorRed)('await ') + 'kv.' + chalk.hex(colorBlue)('focus') + brackets(quotes(id)));
+            console.log(formatAwait() + 'kv.' + formatFunc('focus') + brackets(quotes(id)));
             break;
         case 'blur':
-            console.log(chalk.hex(colorRed)('await ') + 'kv.' + chalk.hex(colorBlue)('blur') + brackets(quotes(id)));
+            console.log(formatAwait() + 'kv.' + formatFunc('blur') + brackets(quotes(id)));
             break;
         default:
             console.log('----------------------');
@@ -78,15 +88,18 @@ function logEvent(event) {
     };
 };
 
-function quotes(string) {
-    return '\'' + chalk.hex(colorYellow)(string) + '\'';
+function quotes(string, options) {
+    options = options || {};
+    const gray = options.gray;
+    const color = gray ? chalk.gray : chalk.hex(colorYellow);
+    return '\'' + color(string) + '\'';
 }
 
 function brackets(string) {
     return '(' + string + ')';
 }
 
-function args(array) {
+function args(...array) {
     let result = '';
     for (let i = 0; i < array.length; i++) {
         result += array[i];
@@ -95,6 +108,17 @@ function args(array) {
         }
     }
     return result;
+}
+
+function formatAwait() {
+    return chalk.hex(colorRed)('await ');
+}
+
+function formatFunc(funcName, options) {
+    options = options || {};
+    const color = options.color;
+    const colorFunc = color == null ? chalk.hex(colorBlue) : chalk.hex(color);
+    return colorFunc(funcName);
 }
 
 function logComponentNotMapped(event) {
