@@ -74,4 +74,105 @@ describe('espress', () => {
 		await kv.press('row.60');
 		await kv.press('espress.selectPickUpTime');
 	});
+	
+	it('clicks customization', async () => {
+		await kv.press('home.orderNow');
+		await kv.press('espress.orderNow');
+		await kv.focus('espress.sites.searchInput');
+		await kv.press('espress.sites.locations.302');
+		await kv.press('espress.confirm.location');
+		await kv.press('espress.selectPickUpTime');
+
+		await kv.press('espress.item.Flat White');
+
+		await kv.press('accordion.section.size', 100);
+		await kv.press('accordion.section.size.0', 100);
+		await kv.press('accordion.section.size', 100);
+		await kv.press('accordion.section.size.1', 100);
+		await kv.press('accordion.section.size', 100);
+		await kv.press('accordion.section.size.2', 100);
+
+		await kv.press('accordion.section.strength');
+		await kv.press('accordion.section.strength.0');
+		await kv.press('accordion.section.strength.1.strength-standard');
+		await kv.press('accordion.section.strength');
+		await kv.press('accordion.section.strength.0');
+		await kv.press('accordion.section.strength.1.strength-extra-shot');
+		await kv.press('accordion.section.strength');
+		await kv.press('accordion.section.strength.1');
+		await kv.press('accordion.section.strength.1.strength-standard');
+		await kv.press('accordion.section.strength');
+		await kv.press('accordion.section.strength.1');
+		await kv.press('accordion.section.strength.1.strength-extra-shot');
+
+		await kv.press('accordion.section.milk', 100);
+		await kv.press('accordion.section.milk.0', 100);
+		await kv.press('accordion.section.milk', 100);
+		await kv.press('accordion.section.milk.1', 100);
+		await kv.press('accordion.section.milk', 100);
+		await kv.press('accordion.section.milk.2', 100);
+		await kv.press('accordion.section.milk', 100);
+		await kv.press('accordion.section.milk.3', 100);
+
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.none');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.0');
+		await kv.press('accordion.section.sugar.3.sugar-half-tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.0');
+		await kv.press('accordion.section.sugar.3.sugar-1tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.0');
+		await kv.press('accordion.section.sugar.3.sugar-2tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.0');
+		await kv.press('accordion.section.sugar.3.sugar-3tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.1');
+		await kv.press('accordion.section.sugar.3.sugar-half-tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.1');
+		await kv.press('accordion.section.sugar.3.sugar-1tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.1');
+		await kv.press('accordion.section.sugar.3.sugar-2tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.1');
+		await kv.press('accordion.section.sugar.3.sugar-3tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.2');
+		await kv.press('accordion.section.sugar.3.sugar-half-tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.2');
+		await kv.press('accordion.section.sugar.3.sugar-1tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.2');
+		await kv.press('accordion.section.sugar.3.sugar-2tsp');
+		await kv.press('accordion.section.sugar');
+		await kv.press('accordion.section.sugar.2');
+		await kv.press('accordion.section.sugar.3.sugar-3tsp');
+
+		await kv.press('accordion.section.flavour');
+		await kv.press('accordion.section.flavour.none');
+		await kv.press('accordion.section.flavour');
+		await kv.press('accordion.section.flavour.0');
+		await kv.press('accordion.section.flavour');
+		await kv.press('accordion.section.flavour.1');
+		await kv.press('accordion.section.flavour');
+		await kv.press('accordion.section.flavour.2');
+
+		await kv.press('accordion.section.toppings');
+		await kv.press('accordion.section.toppings.none');
+		await kv.press('accordion.section.toppings');
+		await kv.press('accordion.section.toppings.0');
+		await kv.press('accordion.section.toppings');
+		await kv.press('accordion.section.toppings.1');
+
+		await kv.press('espress.addToOrder');
+
+		await kv.press('espress.addNote.callToAction');
+		await kv.type('espress.addNote.input', 'can you make up your mind');
+		// await kv.press('espress.addNote.button');
+	});
 });
