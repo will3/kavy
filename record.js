@@ -61,11 +61,18 @@ const colorBlue = '#6ED6EA';
 const colorYellow = '#EAE07F';
 const colorGreen = '#ABE230';
 
+function isControlEvent(event) {
+    return _.includes(['press', 'changeText', 'focus', 'blur'], event.type);
+};
+
 function logEvent(event) {
     const id = _.get(event, 'props.testID');
-    if (id == null) {
-        logComponentNotMapped(event);
-        return;
+
+    if (isControlEvent(event)) {
+        if (id == null) {
+            logComponentNotMapped(event);
+            return;
+        }    
     }
 
     switch (event.type) {
@@ -82,7 +89,6 @@ function logEvent(event) {
             console.log(formatAwait() + 'kv.' + formatFunc('blur') + brackets(quotes(id)));
             break;
         default:
-            console.log('----------------------');
             console.log(chalk.gray('event: ' + util.inspect(event)));
             break;
     };
