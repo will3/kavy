@@ -14,15 +14,28 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {});
 
     socket.on('events', function(event) {
-        if (event.type === 'press') {
-            const id = event.props.testID;
-            if (id == null) {
-                console.log(`component not mapped\nprops:\n${util.inspect(event.props, {
-                    depth: 1
-                })}`);
-            } else {
+        const id = event.props.testID;
+        if (id == null) {
+            logComponentNotMapped(event);
+            return;
+        }
+
+        switch (event.type) {
+            case 'press':
                 console.log('await kv.' + chalk.red('press') + `('${id}');`);
-            }
+                break;
+            case 'changeText':
+                console.log('await kv.' + chalk.red('enter') + `('${id}', '${event.text}');`);
+                break;
+            case 'focus': 
+                console.log('await kv.' + chalk.red('focus') + `('${id}');`);
+                break;
+            case 'blur': 
+                console.log('await kv.' + chalk.red('blur') + `('${id}');`);
+                break;
+            default:
+                console.log(chalk.gray('event: ' + util.inspect(event)));
+                break;
         }
     });
 
@@ -31,3 +44,7 @@ io.on('connection', function(socket) {
         console.log('await kv.' + chalk.green('route') + `('${route.method}', '${urlObject.pathname}', ${stringify(route.body)})`);
     });
 });
+
+function logComponentNotMapped(event) {
+    console.log(chalk.inverse('component not mapped\n') + chalk.gray(`event:\n${util.inspect(event, { depth: 1 })}`));
+};

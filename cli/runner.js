@@ -22,6 +22,10 @@ class Runner {
         await this.rpc('focus', [id]);
     }
 
+    async blur(id) {
+        await this.rpc('blur', [id]);
+    }
+
     async type(id, text) {
         await this.rpc('type', [id, text]);   
     }
@@ -69,7 +73,13 @@ class Runner {
 
         const checkInterval = 1000 / 60;
 
-        const promise = new Promise((resolve, reject) => {
+        this.socket.emit('rpc', {
+            id: rpcId,
+            func,
+            args
+        });
+        
+        await new Promise((resolve, reject) => {
             const interval = setInterval(() => {
                 const resolved = (buffer['rpc-resolve'] || {})[rpcId];
                 const rejected = (buffer['rpc-reject'] || {})[rpcId];
@@ -91,14 +101,6 @@ class Runner {
                 }
             }, checkInterval);
         });
-
-        this.socket.emit('rpc', {
-            id: rpcId,
-            func,
-            args
-        });
-
-        return promise;
     }
 }
 

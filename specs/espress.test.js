@@ -172,7 +172,7 @@ describe('espress', () => {
 		await kv.press('espress.addToOrder');
 
 		await kv.press('espress.addNote.callToAction');
-		await kv.type('espress.addNote.input', 'can you make up your mind');
+		await kv.type('espress.addNote.input', 'Please make tea instead');
 		// await kv.press('espress.addNote.button');
 	});
 });
