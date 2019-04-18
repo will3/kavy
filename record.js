@@ -26,9 +26,7 @@ io.on('connection', function(socket) {
             quotes(urlObject.pathname)
         ];
 
-        const third = route.body == null ? literal('null') : quotes(stringify(route.body), {
-            color: colorComment
-        });
+        const third = route.body == null ? literal('null') : chalk.hex(colorComment)(stringify(route.body));
 
         params.push(third);
 
@@ -44,26 +42,6 @@ io.on('connection', function(socket) {
 
 const eventBuffer = {};
 const eventBufferWait = 50;
-
-function flushEvents(events) {
-    let found = null;
-    for (let i = 0; i < events.length; i++) {
-        const event = events[i];
-        if (event.id != null) {
-            found = event;
-            break;
-        }
-    }
-
-    if (found == null) {
-        console.log('-----------------------');
-        for (let i = 0; i < events.length; i++) {
-            logEvent(events[i]);
-        }
-    } else {
-        logEvent(found);
-    }
-};
 
 const colorRed = '#FA297D';
 const colorBlue = '#6ED6EA';
@@ -88,16 +66,19 @@ function logEvent(event) {
 
     switch (event.type) {
         case 'press':
-            console.log(formatAwait() + 'kv.' + formatFunc('press') + brackets(quotes(id)));
+            console.log(formatAwait() + 'kv.' + formatFunc('press') + brackets(quotes(id)) + ";");
             break;
         case 'changeText':
-            console.log(formatAwait() + 'kv.' + formatFunc('enter') + brackets(args(quotes(id), quotes(event.text))));
+            console.log(formatAwait() + 'kv.' + formatFunc('enter') + brackets(args(quotes(id), quotes(event.text))) + ";");
             break;
         case 'focus':
-            console.log(formatAwait() + 'kv.' + formatFunc('focus') + brackets(quotes(id)));
+            console.log(formatAwait() + 'kv.' + formatFunc('focus') + brackets(quotes(id)) + ";");
             break;
         case 'blur':
-            console.log(formatAwait() + 'kv.' + formatFunc('blur') + brackets(quotes(id)));
+            console.log(formatAwait() + 'kv.' + formatFunc('blur') + brackets(quotes(id)) + ";");
+            break;
+        case 'testerMounted': 
+            console.log('// -------------- START --------------');
             break;
         default:
             console.log(chalk.gray('event: ' + util.inspect(event)));

@@ -5,5 +5,17 @@ global.beforeEach(async () => {
     expect.extend({ toMatchImageSnapshot });
     jest.setTimeout(60000);
 
-    await kv.reRender();
+    await kv.beforeEach();
+});
+
+global.afterEach(async () => {
+    await kv.afterEach();
+});
+
+global.beforeAll(async () => {
+    await kv.beforeAll();
+});
+
+global.afterAll(async () => {
+    await kv.afterAll();
 });

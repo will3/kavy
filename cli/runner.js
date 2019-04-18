@@ -34,8 +34,20 @@ class Runner {
         await this.rpc('clearAsync');
     }
 
-    async reRender() {
-        await this.rpc('reRender');
+    async beforeEach() {
+        await this.rpc('beforeEach');
+    }
+
+    async afterEach() {
+        await this.rpc('afterEach');
+    }
+
+    async beforeAll() {
+        await this.rpc('beforeAll');
+    }
+
+    async afterAll() {
+        await this.rpc('afterAll');
     }
 
     async route(initOrMethod, url, response) {
