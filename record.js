@@ -9,7 +9,7 @@ const _ = require('lodash');
 
 server = http.listen(8084, function() {
     console.log('listening on *:8084');
-});
+})
 
 io.on('connection', function(socket) {
     socket.on('disconnect', function() {});
@@ -19,26 +19,23 @@ io.on('connection', function(socket) {
     });
 
     socket.on('routes', function(route) {
-        const urlObject = parse(route.url);
-
-        const params = [
-            quotes(route.method),
-            quotes(urlObject.pathname)
-        ];
-
-        const third = route.body == null ? literal('null') : chalk.hex(colorComment)(stringify(route.body));
-
-        params.push(third);
-
-        if (route.status != 200) {
-            params.push(literal(route.status));
-        }
-
-        console.log(formatAwait() + 'kv.' + formatFunc('route', {
-            color: colorGreen
-        }) + brackets(args(params)));
+        logRoute(route);
     });
-});
+})
+
+const routes = [];
+function throttleRoute(route) {
+    const matching = routes.find((r) => {
+        return r.method === route.method && 
+        r.url === route.url &&
+        r.status === route.status;
+    });
+
+    if (matching == null) {
+        routes.push(route);
+        logRoute(route);
+    }
+}
 
 const eventBuffer = {};
 const eventBufferWait = 50;
@@ -52,7 +49,7 @@ const colorPurple = '#B58BFF';
 
 function isControlEvent(event) {
     return _.includes(['press', 'changeText', 'focus', 'blur'], event.type);
-};
+}
 
 function logEvent(event) {
     const id = event.id;
@@ -77,14 +74,15 @@ function logEvent(event) {
         case 'blur':
             console.log(formatAwait() + 'kv.' + formatFunc('blur') + brackets(quotes(id)) + ";");
             break;
-        case 'testerMounted': 
+        case 'testerMounted':
             console.log('// -------------- START --------------');
+            routes.splice(0, routes.length);
             break;
         default:
             console.log(chalk.gray('event: ' + util.inspect(event)));
             break;
     };
-};
+}
 
 function quotes(string, options) {
     options = options || {};
@@ -112,7 +110,7 @@ function comments(string) {
     return string.split('\n').map((line) => {
         return chalk.hex(colorComment)('// ' + line);
     }).join('\n');
-};
+}
 
 function formatAwait() {
     return chalk.hex(colorRed)('await ');
@@ -132,4 +130,25 @@ function literal(string) {
 function logComponentNotMapped(event) {
     console.log(comments(chalk.inverse('component not mapped')));
     console.log(comments(`event:\n${util.inspect(event, { depth: 1 })}`));
-};
+}
+
+function logRoute(route) {
+    const urlObject = parse(route.url);
+
+    const params = [
+        quotes(route.method),
+        quotes(urlObject.pathname)
+    ];
+
+    const third = route.body == null ? literal('null') : chalk.hex(colorComment)(stringify(route.body));
+
+    params.push(third);
+
+    if (route.status != 200) {
+        params.push(literal(route.status));
+    }
+
+    console.log(formatAwait() + 'kv.' + formatFunc('route', {
+        color: colorGreen
+    }) + brackets(args(params)) + ";");
+}

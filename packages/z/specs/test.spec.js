@@ -121,7 +121,7 @@ describe('espress', () => {
 		await kv.press('espress.addNote.callToAction');
 
 		await kv.focus('espress.addNote.input');
-		await kv.pause(500);
+		await kv.pause(2000);
 		await kv.type('espress.addNote.input', 'Please make tea instead');
 		
 		expect(await kv.screenshot('espress_make_tea')).toMatchImageSnapshot();
