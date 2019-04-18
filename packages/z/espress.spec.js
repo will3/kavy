@@ -27,20 +27,20 @@ describe('espress', () => {
 		await kv.press('espress.orderNow');
 		await kv.focus('espress.sites.searchInput');
 		await kv.press('espress.sites.locations.302');
-		await kv.screenshot('espress_coffee_location');
+		expect(await kv.screenshot('espress_coffee_location')).toMatchImageSnapshot();
 		await kv.press('espress.confirm.location');
 		await kv.press('row.15');
-		await kv.screenshot('espress_coffee_pick_up_time');
+		expect(await kv.screenshot('espress_coffee_pick_up_time')).toMatchImageSnapshot();
 		await kv.press('espress.selectPickUpTime');
-		await kv.screenshot('espress_coffee_menu');
+		expect(await kv.screenshot('espress_coffee_menu')).toMatchImageSnapshot();
 		await kv.press('espress.item.Flat White');
-		await kv.screenshot('espress_coffee_customization');
+		expect(await kv.screenshot('espress_coffee_customization')).toMatchImageSnapshot();
 		await kv.press('espress.addToOrder');
-		await kv.screenshot('espress_coffee_check_out');
+		expect(await kv.screenshot('espress_coffee_check_out')).toMatchImageSnapshot();
 		await kv.press('espress.checkOut');
-		await kv.screenshot('espress_coffee_payment');
+		expect(await kv.screenshot('espress_coffee_payment')).toMatchImageSnapshot();
 		await kv.press('espress.payNow');
-		await kv.screenshot('espress_coffee_complete');
+		expect(await kv.screenshot('espress_coffee_complete')).toMatchImageSnapshot();
 	});
 
 	it('clicks locations in list', async () => {
@@ -53,7 +53,7 @@ describe('espress', () => {
 		await kv.press('espress.sites.locations.311');
 		await kv.press('espress.sites.locations.80');
 
-		await kv.screenshot('espress_locations');
+		expect(await kv.screenshot('espress_locations')).toMatchImageSnapshot();
 	});
 
 	it('search for location', async() => {
@@ -63,7 +63,7 @@ describe('espress', () => {
 		await kv.type('espress.sites.searchInput', 'Stratford');
 		await kv.press('espress.sites.searchResults.147');
 
-		await kv.screenshot('espress_search_for_location');
+		expect(await kv.screenshot('espress_search_for_location')).toMatchImageSnapshot();
 	});
 	
 
@@ -83,6 +83,6 @@ describe('espress', () => {
 		await kv.press('row.50');
 		await kv.press('row.60');
 
-		await kv.screenshot('espress_select_time');
+		expect(await kv.screenshot('espress_select_time')).toMatchImageSnapshot();
 	});
 });

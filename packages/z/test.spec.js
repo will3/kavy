@@ -119,8 +119,10 @@ describe('espress', () => {
 		await kv.press('espress.addToOrder');
 
 		await kv.press('espress.addNote.callToAction');
+
+		await kv.focus('espress.addNote.input');
 		await kv.type('espress.addNote.input', 'Please make tea instead');
 		
-		await kv.screenshot('espress_make_tea');
+		expect(await kv.screenshot('espress_make_tea')).toMatchImageSnapshot();
 	});
 });

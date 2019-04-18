@@ -64,7 +64,7 @@ describe('check in', function() {
 
         await kv.pause(1000);
 
-        await kv.screenshot('check_in_apply_vouchers');
+        expect(await kv.screenshot('check_in_apply_vouchers')).toMatchImageSnapshot();
     });
 
     test('add and remove voucher', async () => {
@@ -80,7 +80,7 @@ describe('check in', function() {
         await kv.press('voucherList.applyButton');
         await kv.press('checkIn.removeVoucher');
 
-        await kv.screenshot('check_in_remove_voucher');
+        expect(await kv.screenshot('check_in_remove_voucher')).toMatchImageSnapshot();
     });
 
     test('add fly buys', async () => {
@@ -126,7 +126,7 @@ describe('check in', function() {
 
         await kv.press('flyBuys.addButton');
 
-        await kv.screenshot('check_in_add_fly_buys');
+        expect(await kv.screenshot('check_in_add_fly_buys')).toMatchImageSnapshot();
     });
 
     test('opens info', async () => {
@@ -134,7 +134,7 @@ describe('check in', function() {
         await kv.press("checkIn.introModal.okButton");
         await kv.press("checkIn.info");
 
-        await kv.screenshot('check_in_info');
+        expect(await kv.screenshot('check_in_info')).toMatchImageSnapshot();
     });
 
     test('view stamp card', async () => {
@@ -142,6 +142,6 @@ describe('check in', function() {
         await kv.press("checkIn.introModal.okButton");
         await kv.press("checkIn.stampCards.0");
 
-        await kv.screenshot('check_in_stamp_card_drawer');
+        expect(await kv.screenshot('check_in_stamp_card_drawer')).toMatchImageSnapshot();
     });
 });
