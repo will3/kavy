@@ -22,107 +22,67 @@ describe('espress', () => {
 		await kv.route('POST', '/v3/orders/', {});
 	});
 
-	it('clicks customization', async () => {
+	it('order a coffee', async () => {
+		await kv.press('home.orderNow');
+		await kv.press('espress.orderNow');
+		await kv.focus('espress.sites.searchInput');
+		await kv.press('espress.sites.locations.302');
+		// expect(await kv.screenshot('espress_coffee_location')).toMatchImageSnapshot();
+		await kv.press('espress.confirm.location');
+		await kv.press('row.15');
+		// expect(await kv.screenshot('espress_coffee_pick_up_time')).toMatchImageSnapshot();
+		await kv.press('espress.selectPickUpTime');
+		// expect(await kv.screenshot('espress_coffee_menu')).toMatchImageSnapshot();
+		await kv.press('espress.item.Flat White');
+		// expect(await kv.screenshot('espress_coffee_customization')).toMatchImageSnapshot();
+		await kv.press('espress.addToOrder');
+		// expect(await kv.screenshot('espress_coffee_check_out')).toMatchImageSnapshot();
+		await kv.press('espress.checkOut');
+		// expect(await kv.screenshot('espress_coffee_payment')).toMatchImageSnapshot();
+		await kv.press('espress.payNow');
+		expect(await kv.screenshot('espress_coffee_complete')).toMatchImageSnapshot();
+	});
+
+	it('clicks locations in list', async () => {
+		await kv.press('home.orderNow');
+		await kv.press('espress.orderNow');
+		await kv.focus('espress.sites.searchInput');
+		await kv.press('espress.sites.locations.302');
+		await kv.press('espress.sites.locations.12');
+		await kv.press('espress.sites.locations.147');
+		await kv.press('espress.sites.locations.311');
+		await kv.press('espress.sites.locations.80');
+
+		expect(await kv.screenshot('espress_locations')).toMatchImageSnapshot();
+	});
+
+	it('search for location', async() => {
+		await kv.press('home.orderNow');
+		await kv.press('espress.orderNow');
+		await kv.focus('espress.sites.searchInput');
+		await kv.type('espress.sites.searchInput', 'Stratford');
+		await kv.press('espress.sites.searchResults.147');
+
+		expect(await kv.screenshot('espress_search_for_location')).toMatchImageSnapshot();
+	});
+	
+
+	it('clicks times in list', async () => {
 		await kv.press('home.orderNow');
 		await kv.press('espress.orderNow');
 		await kv.focus('espress.sites.searchInput');
 		await kv.press('espress.sites.locations.302');
 		await kv.press('espress.confirm.location');
-		await kv.press('espress.selectPickUpTime');
+		await kv.press('row.0');
+		await kv.press('row.10');
+		await kv.press('row.15');
+		await kv.press('row.20');
+		await kv.press('row.25');
+		await kv.press('row.30');
+		await kv.press('row.40');
+		await kv.press('row.50');
+		await kv.press('row.60');
 
-		await kv.press('espress.item.Flat White');
-
-		await kv.press('accordion.section.size', 100);
-		await kv.press('accordion.section.size.0', 100);
-		await kv.press('accordion.section.size', 100);
-		await kv.press('accordion.section.size.1', 100);
-		await kv.press('accordion.section.size', 100);
-		await kv.press('accordion.section.size.2', 100);
-
-		await kv.press('accordion.section.strength');
-		await kv.press('accordion.section.strength.0');
-		await kv.press('accordion.section.strength.1.strength-standard');
-		await kv.press('accordion.section.strength');
-		await kv.press('accordion.section.strength.0');
-		await kv.press('accordion.section.strength.1.strength-extra-shot');
-		await kv.press('accordion.section.strength');
-		await kv.press('accordion.section.strength.1');
-		await kv.press('accordion.section.strength.1.strength-standard');
-		await kv.press('accordion.section.strength');
-		await kv.press('accordion.section.strength.1');
-		await kv.press('accordion.section.strength.1.strength-extra-shot');
-
-		await kv.press('accordion.section.milk', 100);
-		await kv.press('accordion.section.milk.0', 100);
-		await kv.press('accordion.section.milk', 100);
-		await kv.press('accordion.section.milk.1', 100);
-		await kv.press('accordion.section.milk', 100);
-		await kv.press('accordion.section.milk.2', 100);
-		await kv.press('accordion.section.milk', 100);
-		await kv.press('accordion.section.milk.3', 100);
-
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.none');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.0');
-		await kv.press('accordion.section.sugar.3.sugar-half-tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.0');
-		await kv.press('accordion.section.sugar.3.sugar-1tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.0');
-		await kv.press('accordion.section.sugar.3.sugar-2tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.0');
-		await kv.press('accordion.section.sugar.3.sugar-3tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.1');
-		await kv.press('accordion.section.sugar.3.sugar-half-tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.1');
-		await kv.press('accordion.section.sugar.3.sugar-1tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.1');
-		await kv.press('accordion.section.sugar.3.sugar-2tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.1');
-		await kv.press('accordion.section.sugar.3.sugar-3tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.2');
-		await kv.press('accordion.section.sugar.3.sugar-half-tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.2');
-		await kv.press('accordion.section.sugar.3.sugar-1tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.2');
-		await kv.press('accordion.section.sugar.3.sugar-2tsp');
-		await kv.press('accordion.section.sugar');
-		await kv.press('accordion.section.sugar.2');
-		await kv.press('accordion.section.sugar.3.sugar-3tsp');
-
-		await kv.press('accordion.section.flavour');
-		await kv.press('accordion.section.flavour.none');
-		await kv.press('accordion.section.flavour');
-		await kv.press('accordion.section.flavour.0');
-		await kv.press('accordion.section.flavour');
-		await kv.press('accordion.section.flavour.1');
-		await kv.press('accordion.section.flavour');
-		await kv.press('accordion.section.flavour.2');
-
-		await kv.press('accordion.section.toppings');
-		await kv.press('accordion.section.toppings.none');
-		await kv.press('accordion.section.toppings');
-		await kv.press('accordion.section.toppings.0');
-		await kv.press('accordion.section.toppings');
-		await kv.press('accordion.section.toppings.1');
-
-		await kv.press('espress.addToOrder');
-
-		await kv.press('espress.addNote.callToAction');
-
-		await kv.focus('espress.addNote.input');
-		await kv.type('espress.addNote.input', 'Please make tea instead');
-		
-		expect(await kv.screenshot('espress_make_tea')).toMatchImageSnapshot();
+		expect(await kv.screenshot('espress_select_time')).toMatchImageSnapshot();
 	});
 });
