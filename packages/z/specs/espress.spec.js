@@ -23,28 +23,34 @@ describe('espress', () => {
 	});
 
 	it('order a coffee', async () => {
-		await kv.press('home.orderNow');
+		await kv.press('tabButton.espress');
 		await kv.press('espress.orderNow');
 		await kv.focus('espress.sites.searchInput');
 		await kv.press('espress.sites.locations.302');
-		// expect(await kv.screenshot('espress_coffee_location')).toMatchImageSnapshot();
+		await kv.screenshot('espress_coffee_location');
+
 		await kv.press('espress.confirm.location');
 		await kv.press('row.15');
-		// expect(await kv.screenshot('espress_coffee_pick_up_time')).toMatchImageSnapshot();
+		await kv.screenshot('espress_coffee_pick_up_time');
+
 		await kv.press('espress.selectPickUpTime');
-		// expect(await kv.screenshot('espress_coffee_menu')).toMatchImageSnapshot();
+		await kv.screenshot('espress_coffee_menu');
+
 		await kv.press('espress.item.Flat White');
-		// expect(await kv.screenshot('espress_coffee_customization')).toMatchImageSnapshot();
+		await kv.screenshot('espress_coffee_customization');
+
 		await kv.press('espress.addToOrder');
-		// expect(await kv.screenshot('espress_coffee_check_out')).toMatchImageSnapshot();
+		await kv.screenshot('espress_coffee_check_out');
+
 		await kv.press('espress.checkOut');
-		// expect(await kv.screenshot('espress_coffee_payment')).toMatchImageSnapshot();
+		await kv.screenshot('espress_coffee_payment');
+
 		await kv.press('espress.payNow');
-		expect(await kv.screenshot('espress_coffee_complete')).toMatchImageSnapshot();
+		await kv.screenshot('espress_coffee_complete');
 	});
 
 	it('clicks locations in list', async () => {
-		await kv.press('home.orderNow');
+		await kv.press('tabButton.espress');
 		await kv.press('espress.orderNow');
 		await kv.focus('espress.sites.searchInput');
 		await kv.press('espress.sites.locations.302');
@@ -53,22 +59,22 @@ describe('espress', () => {
 		await kv.press('espress.sites.locations.311');
 		await kv.press('espress.sites.locations.80');
 
-		expect(await kv.screenshot('espress_locations')).toMatchImageSnapshot();
+		await kv.screenshot('espress_locations');
 	});
 
 	it('search for location', async() => {
-		await kv.press('home.orderNow');
+		await kv.press('tabButton.espress');
 		await kv.press('espress.orderNow');
 		await kv.focus('espress.sites.searchInput');
 		await kv.type('espress.sites.searchInput', 'Stratford');
 		await kv.press('espress.sites.searchResults.147');
 
-		expect(await kv.screenshot('espress_search_for_location')).toMatchImageSnapshot();
+		await kv.screenshot('espress_search_for_location');
 	});
 	
 
 	it('clicks times in list', async () => {
-		await kv.press('home.orderNow');
+		await kv.press('tabButton.espress');
 		await kv.press('espress.orderNow');
 		await kv.focus('espress.sites.searchInput');
 		await kv.press('espress.sites.locations.302');
@@ -83,6 +89,6 @@ describe('espress', () => {
 		await kv.press('row.50');
 		await kv.press('row.60');
 
-		expect(await kv.screenshot('espress_select_time')).toMatchImageSnapshot();
+		await kv.screenshot('espress_select_time');
 	});
 });

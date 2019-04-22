@@ -23,7 +23,7 @@ describe('espress', () => {
 	});
 
 	it('clicks customization', async () => {
-		await kv.press('home.orderNow');
+		await kv.press('tabButton.espress');
 		await kv.press('espress.orderNow');
 		await kv.focus('espress.sites.searchInput');
 		await kv.press('espress.sites.locations.302');
