@@ -6,6 +6,7 @@ const { stringify } = require("javascript-stringify");
 const { parse } = require('url');
 const chalk = require('chalk');
 const _ = require('lodash');
+const argv = require('minimist')(process.argv.slice(2));
 
 server = http.listen(8084, function() {
     console.log('listening on *:8084');
@@ -19,7 +20,9 @@ io.on('connection', function(socket) {
     });
 
     socket.on('routes', function(route) {
-        logRoute(route);
+        if (argv.routes) {
+            logRoute(route);    
+        }
     });
 })
 
